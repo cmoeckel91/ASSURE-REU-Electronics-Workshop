@@ -12,7 +12,7 @@
 
 <https://circuitpython.org/board/adafruit_feather_rp2040/>
 
-### RP2040 instructions
+### RP2040 setup instructions
 (From Adafruit install page)
 
 You'll want to find two buttons on the RP2040 boards: reset and BOOTSEL/BOOT. The two buttons are the same size - small black buttons. Reset is typically labeled RESET or RST on the board. The boot button is labeled BOOTSEL or BOOT on the board.
@@ -20,3 +20,12 @@ You'll want to find two buttons on the RP2040 boards: reset and BOOTSEL/BOOT. Th
 To enter the bootloader on an RP2040 board, you must hold down the boot select button, and while continuing to hold it, press and release the reset button. Continue to hold the boot select button until the bootloader drive appears.
 
 Once successful, the RGB status LED(s) on the board will flash red and then stay ~~green~~ red. A new drive will show up on your computer. The drive will be called RPI-RP2 on all RP2040 boards.
+
+
+### RP2040 Write to flash instructions
+<https://learn.adafruit.com/getting-started-with-raspberry-pi-pico-circuitpython/data-logger>
+
+- Can't use flash access via computer and flash access via code at the same time
+- boot.py sets up code access
+- remove boot.py with REPL over serial to reset
+
