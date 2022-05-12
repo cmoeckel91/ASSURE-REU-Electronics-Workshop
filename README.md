@@ -33,3 +33,23 @@ Once successful, the RGB status LED(s) on the board will flash red and then stay
 import os
 os.remove("boot.py")
 ```
+
+## CPU Temperature data logger
+
+- After installing CircuitPy, attach Feather via USB cable
+- Copy `boot.py` and `code.py` from `temp-datalogger` to `CIRCUITPY` mounted drive
+- Press reset button (mounted drive should disappear)
+- When drive remounts, check that it is read-only. (May have limited checking of files, even if they are being written continuously, only a few lines may appear)
+- When finished recording data, open serial monitor with `screen /dev/tty.usbmodem14201` for Mac, or Mu software for any OS
+- Press CTRL+C (or equivalent) and then press any key to enter REPL
+- Run `import os; os.rename('boot.py', 'flash.py')`
+- Press reset button to reload default boot
+- Check to see that temperature data was recorded as expected
+
+
+## Notes
+
+CircuitPy has no interrupts, use the new asyncio implementation to get millisecond-ish timing of tasks. This is probably okay for most any application, with the possible exception of the Once A Second PPS for SWEM. 
+
+PIO is cool
+<https://learn.adafruit.com/intro-to-rp2040-pio-with-circuitpython?view=all>
