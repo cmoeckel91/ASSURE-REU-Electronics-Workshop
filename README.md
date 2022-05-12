@@ -29,3 +29,7 @@ Once successful, the RGB status LED(s) on the board will flash red and then stay
 - boot.py sets up code access
 - remove boot.py with REPL over serial to reset
 
+```
+import os
+os.remove("boot.py")
+```
