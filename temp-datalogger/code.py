@@ -9,6 +9,11 @@ import time
 import board
 import digitalio
 import microcontroller
+import rtc
+import time
+
+rtclk = rtc.RTC()
+rtclk.datetime = time.struct_time((1970, 1, 1, 0, 0, 0, 0, -1, -1)) # Reset time.time() to 0
 
 led = digitalio.DigitalInOut(board.LED)
 led.switch_to_output()
@@ -17,7 +22,8 @@ try:
     with open("/temperature.txt", "a") as datalog:
         while True:
             temp = microcontroller.cpu.temperature
-            datalog.write('{0:f}\n'.format(temp))
+            timestamp = time.time()
+            datalog.write(f'{timestamp},{temp}\n')
             datalog.flush()
             led.value = not led.value
             time.sleep(1)
