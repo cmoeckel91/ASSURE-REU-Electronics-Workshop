@@ -3,7 +3,9 @@
 ## Goals
 
 [x] To measure temperature and write data to internal flash
+
 [x] Save time relative to startup to flash
+
 [ ] Eventually, to use accelerometer + gyro to measure movement and save to internal flash
 
 
