@@ -10,6 +10,8 @@
 
 [ ] Write up nice document for step by step usage of RP2040 with sensor
 
+[ ] Write up a nice document for learning about EE equipment
+
 
 ## CircuitPython
 
