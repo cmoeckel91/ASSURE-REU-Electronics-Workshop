@@ -33,7 +33,7 @@ Over the next couple of hours we'll explore:
 - Air sensor code walkthrough
 - Try out Air sensor and print out boring data
 
-4:20pm - 5pm:
+### 4:20pm - 5pm:
 - Assemble balloon payloads, inflate balloons, mark string
 - Take balloons outside and test! Get a few repeats, someone marking approximately when events occur
 - Bring balloons back inside for making basic graphs of all data over time (could be continued next day!)
