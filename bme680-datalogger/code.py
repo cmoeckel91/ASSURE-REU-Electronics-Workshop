@@ -18,6 +18,7 @@ i2c = board.I2C()
 sensor = adafruit_bme680.Adafruit_BME680_I2C(i2c)
 
 sensor.seaLevelhPa = 1014.8
+temperature_offset = -5
 
 starttime = time.monotonic()
 
@@ -26,14 +27,20 @@ try:
         while True:
             
             timestamp = time.monotonic() - starttime
+            
+            temperature = sensor.temperature + temperature_offset
+            gas_resistance = sensor.gas
+            humidity = sensor.humidity
+            pressure = sensor.pressure
+            altitude = sensor.altitude
 
-            print('Temperature: {} degrees C'.format(sensor.temperature))
-            print('Gas: {} ohms'.format(sensor.gas))
-            print('Humidity: {}%'.format(sensor.humidity))
-            print('Pressure: {}hPa'.format(sensor.pressure))
-            print('Altitude: {} meters'.format(sensor.altitude))
+            print('Temperature: {} degrees C'.format(temperature))
+            print('Gas: {} ohms'.format(gas_resistance))
+            print('Humidity: {}%'.format(humidity))
+            print('Pressure: {}hPa'.format(pressure))
+            print('Altitude: {} meters'.format(altitude))
 
-            datalog.write(f'{timestamp},{sensor.temperature},{sensor.gas},{sensor.humidity},{sensor.pressure},{sensor.altitude}\n')
+            datalog.write(f'{timestamp},{temperature},{gas_resistance},{humidity},{pressure},{altitude}\n')
             datalog.flush()
             led.value = not led.value
             time.sleep(0.1)
