@@ -4,39 +4,36 @@
 # Extended by Scott Candey for ASSURE 2022 at UCB SSL
 
 """
-Data logging example for Pic + lsm6dso32. Logs the values to a file on the Pico.
+Data logging example for Pico + bme680. Logs the values to a file on the Pico.
 """
 import time
-import board
 import digitalio
-import time
-
-from adafruit_lsm6ds.lsm6dso32 import LSM6DSO32 as LSM6DS
-from adafruit_lsm6ds import Rate
-
 
 led = digitalio.DigitalInOut(board.LED)
 led.switch_to_output()
 
-i2c = board.I2C()  # uses board.SCL and board.SDA
-sensor = LSM6DS(i2c)
-sensor.accelerometer_data_rate = Rate.RATE_26_HZ
-sensor.gyro_data_rate = Rate.RATE_26_HZ
+import board
+import adafruit_bme680
+i2c = board.I2C()
+sensor = adafruit_bme680.Adafruit_BME680_I2C(i2c)
+
+sensor.seaLevelhPa = 1014.8
 
 starttime = time.monotonic()
 
 try:
-    with open("/positioning.csv", "a") as datalog:
+    with open("/airmeasures.csv", "a") as datalog:
         while True:
-
-            acc_x, acc_y, acc_z = sensor.acceleration
-            gyro_x, gyro_y, gyro_z = sensor.gyro
             
             timestamp = time.monotonic() - starttime
 
-            print(f'Seconds: {timestamp} Acceleration (m/s^2) X: {acc_x} Y: {acc_y} Z: {acc_z} Gyro (rad/s) X: {gyro_x} Y: {gyro_y} Z: {gyro_z}')
+            print('Temperature: {} degrees C'.format(sensor.temperature))
+            print('Gas: {} ohms'.format(sensor.gas))
+            print('Humidity: {}%'.format(sensor.humidity))
+            print('Pressure: {}hPa'.format(sensor.pressure))
+            print('Altitude: {} meters'.format(sensor.altitude))
 
-            datalog.write(f'{timestamp},{acc_x},{acc_y},{acc_z},{gyro_x},{gyro_y},{gyro_z}\n')
+            datalog.write(f'{timestamp},{sensor.temperature},{sensor.gas},{sensor.humidity},{sensor.pressure},{sensor.altitude}\n')
             datalog.flush()
             led.value = not led.value
             time.sleep(0.1)
