@@ -1,4 +1,4 @@
-# ASSURE 2022 Electronics Workshop
+# ASSURE 2023 Electronics Workshop
 
 Slideshow is `electronics-workshop-presentation.pdf`.
 

@@ -8,9 +8,9 @@
 
 [x] Eventually, to use accelerometer + gyro to measure movement and save to internal flash
 
-[ ] Write up nice document for step by step usage of RP2040 with sensor
+[x] Write up nice document for step by step usage of RP2040 with sensor
 
-[ ] Write up a nice document for learning about EE equipment
+[x] Write up a nice document for learning about EE equipment
 
 
 ## CircuitPython

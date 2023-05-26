@@ -8,12 +8,12 @@ color: #000
 _class: lead
 ---
 
-# ASSURE REU 2022: 
+# ASSURE REU 2023: 
 # Electronics Workshop
 Scott Candey
 
-2022-06-08
-Version 1
+2023-05-25
+Version 2
 
 ---
 
@@ -85,7 +85,7 @@ How to tell what is happening over time? Oscilloscope!
 ## Programming the microcontroller
 
 Using the wonderful tutorials from Adafruit:
-- [Install the Mu editor](https://learn.adafruit.com/adafruit-feather-rp2040-pico/installing-mu-editor)
+- [Install the Mu editor](https://learn.adafruit.com/adafruit-feather-rp2040-pico/installing-mu-editor) or [Install VSCode and the Circuit python extension](https://github.com/joedevivo/vscode-circuitpython)
 - Write "Hello World" equivalent: [Blinky](https://learn.adafruit.com/welcome-to-circuitpython/creating-and-editing-code)
 - Talk to the board with the [serial console](https://learn.adafruit.com/welcome-to-circuitpython/kattni-connecting-to-the-serial-console)
 - Program the microcontroller "live" using [REPL](https://learn.adafruit.com/welcome-to-circuitpython/the-repl)
