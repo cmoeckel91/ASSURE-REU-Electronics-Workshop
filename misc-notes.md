@@ -1,5 +1,14 @@
 # RP2040 Testing for ASSURE 2022
 
+## Troubleshooting (used too much flash?)
+
+- Bootsel + Reset to go into boot mode
+- Copy `flash_nuke.uf2` into RP2-PI
+- Copy `adafruit-circuitpython-adafruit_feather_rp2040-en_US-8.1.0.uf2` into RP2-PI
+- Copy `boot.py`, `code.py` and `lib` into CIRCUITPY
+
+
+
 ## Goals
 
 [x] To measure temperature and write data to internal flash
@@ -87,7 +96,7 @@ Depends on:
 - Register (adafruit_register)
 
 
-Strangely reads 20m/s^s for gravity instead of 9m/s^2 ???
+Strangely reads 20m/s^s for gravity instead of 9m/s^2 ??? (fixed by dividing in half)
 
 ### Magnetometer
 TLV493D 
