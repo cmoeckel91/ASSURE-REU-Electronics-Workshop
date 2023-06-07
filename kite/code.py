@@ -43,7 +43,7 @@ try:
             gyro_x, gyro_y, gyro_z = sensor2.gyro
 
             dataline = f'{timestamp},{temperature},{gas_resistance},{humidity},{pressure},{altitude},{acc_x},{acc_y},{acc_z},{gyro_x},{gyro_y},{gyro_z}\n'
-            print(f'Time {timestamp}, Temp {temperature}, Gas {gas_resistance}, Humid {humidity}, Altitude {altitude}, AccX {acc_x}, AccY {acc_y}, AccZ {acc_z}, GyroX {gyro_x}, GyroY {gyro_y}, GyroZ {gyro_z}')
+            # print(f'Time {timestamp}, Temp {temperature}, Gas {gas_resistance}, Humid {humidity}, Altitude {altitude}, AccX {acc_x}, AccY {acc_y}, AccZ {acc_z}, GyroX {gyro_x}, GyroY {gyro_y}, GyroZ {gyro_z}')
             datalog.write(dataline)
             datalog.flush()
             led.value = not led.value
