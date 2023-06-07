@@ -40,10 +40,18 @@ Once successful, the RGB status LED(s) on the board will flash red and then stay
 import os; os.remove("boot.py")
 ```
 
+#### Reset with jumper from A0 to GND instead  
+
 ### Additional libraries
 Download all here: <https://circuitpython.org/libraries>
 
 Copy required libraries + their dependencies to the lib directory on the circuitpy volume
+
+#### Use circup install with controller plugged in
+- pip install circup
+- circup install neopixel
+- circup install adafruit_bme680
+- circup install adafruit_lsm6ds
 
 ## Sensing and saving
 

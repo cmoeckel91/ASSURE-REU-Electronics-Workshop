@@ -4,57 +4,78 @@ Data logging example for Pico + bme680 + LSM6DSO32. Logs the values to a file on
 import time
 import digitalio
 import board
-import neopixel
 import adafruit_bme680
 
-from adafruit_lsm6ds.lsm6dso32 import LSM6DSO32 as LSM6DS
-from adafruit_lsm6ds import Rate
+from adafruit_lsm6ds.lsm6dso32 import LSM6DSO32
+from adafruit_lsm6ds import Rate, AccelRange, GyroRange
 
 led = digitalio.DigitalInOut(board.LED)
 led.switch_to_output()
 
-pixels = neopixel.NeoPixel(board.NEOPIXEL, 1)
+i2c = board.STEMMA_I2C()
+# i2c = board.I2C()
 
-i2c = board.I2C()
-sensor1 = adafruit_bme680.Adafruit_BME680_I2C(i2c)
-
-sensor1.seaLevelhPa = 1014.8
+atmosphere = adafruit_bme680.Adafruit_BME680_I2C(i2c, refresh_rate=100, debug=False)
 temperature_offset = -5
+atmosphere.sea_level_pressure = 1013.25
+# atmosphere.temperature_oversample = 1
+# atmosphere.pressure_oversample = 1
+# atmosphere.humidity_oversample = 1
 
-sensor2 = LSM6DS(i2c)
-sensor2.accelerometer_data_rate = Rate.RATE_26_HZ
-sensor2.gyro_data_rate = Rate.RATE_26_HZ
+accgyro = LSM6DSO32(i2c)
+accgyro.accelerometer_data_rate = Rate.RATE_208_HZ
+accgyro.accelerometer_range = AccelRange.RANGE_8G
+accgyro.gyro_data_rate = Rate.RATE_208_HZ
+accgyro.gyro_range = GyroRange.RANGE_250_DPS
 
 starttime = time.monotonic()
 
+can_write = False
+
+acc_per_atmos = 8 # 3 second delay between measures
+
+# get_atmosphere = True
+
 try:
-    with open("/measurements.csv", "a") as datalog:
-        while True:
-            
-            timestamp = time.monotonic() - starttime
-            
-            temperature = sensor1.temperature + temperature_offset
-            gas_resistance = sensor1.gas
-            humidity = sensor1.humidity
-            pressure = sensor1.pressure
-            altitude = sensor1.altitude
-
-            acc_x, acc_y, acc_z = sensor2.acceleration
-            gyro_x, gyro_y, gyro_z = sensor2.gyro
-
-            dataline = f'{timestamp},{temperature},{gas_resistance},{humidity},{pressure},{altitude},{acc_x},{acc_y},{acc_z},{gyro_x},{gyro_y},{gyro_z}\n'
-            # print(f'Time {timestamp}, Temp {temperature}, Gas {gas_resistance}, Humid {humidity}, Altitude {altitude}, AccX {acc_x}, AccY {acc_y}, AccZ {acc_z}, GyroX {gyro_x}, GyroY {gyro_y}, GyroZ {gyro_z}')
-            datalog.write(dataline)
-            datalog.flush()
-            led.value = not led.value
-            time.sleep(0.1)
-
+    datalog = open("/measurements.csv", "a")
 except OSError as e:  # Typically when the filesystem isn't writeable...
-    print(f'OSError {e}')
-    pixels.fill((255, 0, 0))
-    delay = 1  # ...blink the LED every half second.
-    if e.args[0] == 28:  # If the filesystem is full...
-        delay = 0.5  # ...blink the LED faster!
-    while True:
-        led.value = not led.value
-        time.sleep(delay)
+    print(f'OSError occured while opening file, presumably flash is not in read/write mode: {e}')
+except Exception as e:
+    print(f'Unexpected exception occured while opening file: {e}')
+else:
+    can_write = True
+
+
+while True:
+
+
+    temperature = atmosphere.temperature + temperature_offset # in degC
+    humidity = atmosphere.humidity # in RH %
+    pressure = atmosphere.pressure # in ??
+    timestamp = time.monotonic() - starttime
+    print(f'Time {timestamp}, Temp {temperature}, Humid {humidity}, Pressure {pressure}')
+
+    #     print(f'Wrote timestamp {timestamp} data to flash')
+    # else:
+    #     print(f'No data written to flash')
+ 
+
+    for i in range(acc_per_atmos):
+        acc_x, acc_y, acc_z = accgyro.acceleration
+        acc_x, acc_y, acc_z = (acc_x / 2, acc_y / 2, acc_z / 2 ) # fix offset issue
+        gyro_x, gyro_y, gyro_z = accgyro.gyro # in rad/s
+        timestamp = time.monotonic() - starttime
+        print(f'Time {timestamp}, AccX {acc_x}, AccY {acc_y}, AccZ {acc_z}, GyroX {gyro_x}, GyroY {gyro_y}, GyroZ {gyro_z}')
+
+        if can_write:
+            datalog.write(f'{timestamp},{temperature},{humidity},{pressure},{acc_x},{acc_y},{acc_z},{gyro_x},{gyro_y},{gyro_z}\n')
+            datalog.flush()
+
+        time.sleep(0.5)
+        #     print(f'Wrote timestamp {timestamp} data to flash')
+        # else:
+        #     print(f'No data written to flash')
+    
+    led.value = not led.value
+
+    # time.sleep(0.1)
