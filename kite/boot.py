@@ -4,8 +4,15 @@
 
 """
 boot.py file for Pico data logging example. If this file is present when
-the pico starts up, make the filesystem writeable by CircuitPython.
+the pico starts up + , make the filesystem writeable by CircuitPython.
 """
 import storage
+import board
+import digitalio
 
-storage.remount("/", readonly=False)
+write_pin = digitalio.DigitalInOut(board.A0)
+write_pin.direction = digitalio.Direction.INPUT
+write_pin.pull = digitalio.Pull.UP
+
+if write_pin.value: # if tied to ground on startup, go into write mode
+    storage.remount("/", readonly=False)

@@ -4,6 +4,7 @@ Data logging example for Pico + bme680 + LSM6DSO32. Logs the values to a file on
 import time
 import digitalio
 import board
+import neopixel
 import adafruit_bme680
 
 from adafruit_lsm6ds.lsm6dso32 import LSM6DSO32 as LSM6DS
@@ -11,6 +12,8 @@ from adafruit_lsm6ds import Rate
 
 led = digitalio.DigitalInOut(board.LED)
 led.switch_to_output()
+
+pixels = neopixel.NeoPixel(board.NEOPIXEL, 1)
 
 i2c = board.I2C()
 sensor1 = adafruit_bme680.Adafruit_BME680_I2C(i2c)
@@ -39,15 +42,19 @@ try:
             acc_x, acc_y, acc_z = sensor2.acceleration
             gyro_x, gyro_y, gyro_z = sensor2.gyro
 
-            datalog.write(f'{timestamp},{temperature},{gas_resistance},{humidity},{pressure},{altitude},{acc_x},{acc_y},{acc_z},{gyro_x},{gyro_y},{gyro_z}\n')
+            dataline = f'{timestamp},{temperature},{gas_resistance},{humidity},{pressure},{altitude},{acc_x},{acc_y},{acc_z},{gyro_x},{gyro_y},{gyro_z}\n'
+            print(f'Time {timestamp}, Temp {temperature}, Gas {gas_resistance}, Humid {humidity}, Altitude {altitude}, AccX {acc_x}, AccY {acc_y}, AccZ {acc_z}, GyroX {gyro_x}, GyroY {gyro_y}, GyroZ {gyro_z}')
+            datalog.write(dataline)
             datalog.flush()
             led.value = not led.value
             time.sleep(0.1)
 
 except OSError as e:  # Typically when the filesystem isn't writeable...
-    delay = 0.5  # ...blink the LED every half second.
+    print(f'OSError {e}')
+    pixels.fill((255, 0, 0))
+    delay = 1  # ...blink the LED every half second.
     if e.args[0] == 28:  # If the filesystem is full...
-        delay = 0.25  # ...blink the LED faster!
+        delay = 0.5  # ...blink the LED faster!
     while True:
         led.value = not led.value
         time.sleep(delay)
