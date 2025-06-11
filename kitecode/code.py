@@ -37,7 +37,7 @@ acc_per_atmos = 8 # 3 second delay between measures
 # get_atmosphere = True
 
 try:
-    datalog = open("/measurements.csv", "a")
+    datalog = open("/measurements.csv", "a") # Creates a new file, when none exists. 
 except OSError as e:  # Typically when the filesystem isn't writeable...
     print(f'OSError occured while opening file, presumably flash is not in read/write mode: {e}')
 except Exception as e:
@@ -58,7 +58,7 @@ while True:
     #     print(f'Wrote timestamp {timestamp} data to flash')
     # else:
     #     print(f'No data written to flash')
- 
+
 
     for i in range(acc_per_atmos):
         acc_x, acc_y, acc_z = accgyro.acceleration
@@ -75,7 +75,7 @@ while True:
         #     print(f'Wrote timestamp {timestamp} data to flash')
         # else:
         #     print(f'No data written to flash')
-    
+
     led.value = not led.value
 
     # time.sleep(0.1)
